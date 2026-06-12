@@ -1,0 +1,138 @@
+{
+  "_comment": "game-config.json — 게임 밸런스 설정. 재배포 없이 POST /api/reload-config 로 즉시 반영됩니다.",
+
+  "player": {
+    "baseStats": {
+      "health": 100,
+      "mana": 100,
+      "manaRegen": 4,
+      "startingGold": 150
+    },
+    "levelCurve": {
+      "baseXp": 100,
+      "xpScaling": 1.5,
+      "skillPointsPerLevel": 1,
+      "manaGrowth": {
+        "maxManaMultiplier": 0.2,
+        "regenMultiplier": 0.15
+      }
+    }
+  },
+
+  "wave": {
+    "baseCount": 5,
+    "countGrowth": 2,
+    "baseHealth": 50,
+    "healthGrowthPerWave": 20,
+    "baseSpeed": 60,
+    "speedGrowthPerWave": 6,
+    "baseGold": 10,
+    "goldGrowthPerWave": 2,
+    "baseXp": 15,
+    "xpGrowthPerWave": 5,
+    "attributeEnemyStartWave": 5,
+    "attributeEnemyBaseChance": 0.1,
+    "attributeEnemyChanceGrowth": 0.05,
+    "attributeEnemyMaxChance": 0.8,
+    "intermissionTicks": 100,
+    "firstWaveDelay": 80,
+    "spawnInterval": 20,
+    "bossHealthMultiplier": 6,
+    "bossSpeedMultiplier": 0.65,
+    "clearBonus": {
+      "gold": 50,
+      "goldPerWave": 10
+    }
+  },
+
+  "attributes": {
+    "list": ["fire", "water", "earth", "wind", "lightning"],
+    "displayNames": {
+      "fire": "불",
+      "water": "물",
+      "earth": "땅",
+      "wind": "바람",
+      "lightning": "번개"
+    }
+  },
+
+  "combat": {
+    "affinityTable": {
+      "fire":      { "earth": 2.0, "water": 0.5 },
+      "water":     { "fire": 2.0,  "wind": 0.5  },
+      "wind":      { "water": 2.0, "lightning": 0.5 },
+      "lightning": { "wind": 2.0,  "earth": 0.5 },
+      "earth":     { "lightning": 2.0, "fire": 0.5 }
+    },
+    "enemyReachEndDamage": 20,
+    "neutralMultiplier": 1.0
+  },
+
+  "spells": {
+    "shapeToAttribute": {
+      "circle":   "water",
+      "triangle": "fire",
+      "square":   "earth",
+      "star":     "lightning",
+      "cross":    "wind"
+    },
+    "attributeDamage": {
+      "fire":      35,
+      "water":     25,
+      "earth":     40,
+      "wind":      20,
+      "lightning": 30
+    },
+    "manaCost": {
+      "fire":      20,
+      "water":     10,
+      "earth":     30,
+      "wind":      10,
+      "lightning": 25
+    },
+    "defaultDamage": 20,
+    "defaultManaCost": 15,
+    "projectileSpeed": 220
+  },
+
+  "towers": {
+    "slots": [
+      { "id": 0, "position": { "x": 192, "y": 144 } },
+      { "id": 1, "position": { "x": 400, "y": 96  } },
+      { "id": 2, "position": { "x": 608, "y": 288 } },
+      { "id": 3, "position": { "x": 288, "y": 400 } },
+      { "id": 4, "position": { "x": 512, "y": 448 } }
+    ],
+    "baseStats": {
+      "damage": 20,
+      "range": 130,
+      "attackSpeed": 1.0
+    },
+    "maxLevel": 5,
+    "assignCost": 50,
+    "upgradeCostBase": 100,
+    "levelDamageBonus": 0.3,
+    "levelRangeBonus": 0.15,
+    "levelSpeedBonus": 0.2
+  },
+
+  "map": {
+    "width": 800,
+    "height": 576,
+    "path": [
+      { "x":   0, "y": 288 },
+      { "x": 160, "y": 288 },
+      { "x": 160, "y": 144 },
+      { "x": 352, "y": 144 },
+      { "x": 352, "y": 448 },
+      { "x": 544, "y": 448 },
+      { "x": 544, "y": 192 },
+      { "x": 800, "y": 192 }
+    ]
+  },
+
+  "ml": {
+    "minConfidence": 0.65,
+    "inferenceEndpoint": "http://localhost:5001/predict"
+  }
+}

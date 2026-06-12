@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>마법진 디펜스</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- ── HUD 상단 바 ── -->
+    <header id="hud-top">
+      <div class="hud-group">
+        <span class="hud-label">❤</span>
+        <div class="bar-wrap">
+          <div id="bar-hp" class="bar hp-bar"></div>
+          <span id="txt-hp" class="bar-txt">100/100</span>
+        </div>
+      </div>
+      <div class="hud-group">
+        <span class="hud-label">💧</span>
+        <div class="bar-wrap">
+          <div id="bar-mana" class="bar mana-bar"></div>
+          <span id="txt-mana" class="bar-txt">100/100</span>
+        </div>
+      </div>
+      <div class="hud-group">
+        <span class="hud-label">⭐</span>
+        <div class="bar-wrap">
+          <div id="bar-xp" class="bar xp-bar"></div>
+          <span id="txt-xp" class="bar-txt">0/100</span>
+        </div>
+      </div>
+      <div class="hud-sep"></div>
+      <div class="hud-stat"><span class="hud-label">LV</span><span id="txt-level" class="hud-val">1</span></div>
+      <div class="hud-stat"><span class="hud-label">💰</span><span id="txt-gold" class="hud-val">150</span></div>
+      <div class="hud-stat"><span class="hud-label">🔮</span><span id="txt-sp" class="hud-val">0</span></div>
+      <div class="hud-sep"></div>
+      <div id="wave-badge"><span id="txt-wave">대기중</span></div>
+      <div id="intermission-timer" class="hidden"><span id="txt-timer">5</span>초 후 웨이브</div>
+    </header>
+
+    <!-- ── 게임 영역 ── -->
+    <main id="game-area">
+
+      <!-- 게임 캔버스 레이어 스택 -->
+      <div id="canvas-stack">
+        <canvas id="cv-map"    width="800" height="576"></canvas>
+        <canvas id="cv-game"   width="800" height="576"></canvas>
+        <canvas id="cv-vfx"    width="800" height="576"></canvas>
+        <canvas id="cv-ui"     width="800" height="576"></canvas>
+      </div>
+
+      <!-- 타워 슬롯 패널 (우측) -->
+      <aside id="tower-panel">
+        <div class="panel-title">타워 슬롯</div>
+        <div id="tower-slots"></div>
+        <div class="affinity-hint">
+          <div class="aff-title">속성 상성</div>
+          <div class="aff-row"><span class="attr-chip fire">불</span>→<span class="attr-chip earth">땅</span>×2</div>
+          <div class="aff-row"><span class="attr-chip water">물</span>→<span class="attr-chip fire">불</span>×2</div>
+          <div class="aff-row"><span class="attr-chip wind">바람</span>→<span class="attr-chip water">물</span>×2</div>
+          <div class="aff-row"><span class="attr-chip lightning">번개</span>→<span class="attr-chip wind">바람</span>×2</div>
+          <div class="aff-row"><span class="attr-chip earth">땅</span>→<span class="attr-chip lightning">번개</span>×2</div>
+        </div>
+      </aside>
+
+    </main>
+
+    <!-- ── 마법진 드로잉 패널 (하단) ── -->
+    <footer id="draw-panel">
+      <div id="draw-area">
+        <div id="draw-ring">
+          <canvas id="cv-draw" width="220" height="220"></canvas>
+          <div id="draw-hint">여기에 도형을 그리세요</div>
+          <div id="draw-feedback" class="hidden"></div>
+        </div>
+        <div id="shape-guide">
+          <div class="guide-title">도형 → 속성</div>
+          <div class="guide-row"><span class="shape-icon">○</span><span class="attr-chip water">물</span></div>
+          <div class="guide-row"><span class="shape-icon">△</span><span class="attr-chip fire">불</span></div>
+          <div class="guide-row"><span class="shape-icon">□</span><span class="attr-chip earth">땅</span></div>
+          <div class="guide-row"><span class="shape-icon">★</span><span class="attr-chip lightning">번개</span></div>
+          <div class="guide-row"><span class="shape-icon">✚</span><span class="attr-chip wind">바람</span></div>
+        </div>
+        <div id="slot-selector">
+          <div class="guide-title">발사 슬롯</div>
+          <div id="slot-btns"></div>
+        </div>
+        <div id="draw-status">
+          <div id="recognized-shape" class="hidden">
+            <div class="rec-label">인식됨</div>
+            <div id="rec-shape-icon" class="rec-icon"></div>
+            <div id="rec-attr-name" class="rec-attr"></div>
+          </div>
+          <button id="btn-clear-draw" class="btn-secondary">지우기</button>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ── 웨이브 시작 알림 오버레이 ── -->
+    <div id="overlay-wave" class="overlay hidden">
+      <div class="overlay-box">
+        <div id="overlay-wave-title">웨이브 1</div>
+        <div id="overlay-wave-sub"></div>
+        <div id="wave-preview"></div>
+      </div>
+    </div>
+
+    <!-- ── 게임 오버 오버레이 ── -->
+    <div id="overlay-gameover" class="overlay hidden">
+      <div class="overlay-box gameover-box">
+        <div class="overlay-title-dead">GAME OVER</div>
+        <div id="gameover-wave"></div>
+        <button id="btn-reload" class="btn-primary">다시 시작</button>
+      </div>
+    </div>
+
+    <!-- ── 연결 대기 오버레이 ── -->
+    <div id="overlay-connecting" class="overlay">
+      <div class="overlay-box">
+        <div class="spin"></div>
+        <div style="margin-top:12px;color:#aaa;">서버에 연결 중...</div>
+      </div>
+    </div>
+
+    <!-- ── 플로팅 메시지 컨테이너 ── -->
+    <div id="float-msgs"></div>
+
+    <!-- ── 레벨업 팝업 ── -->
+    <div id="levelup-popup" class="hidden">LEVEL UP!</div>
+
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/tf.min.js"></script>
+  <script src="shape_recognizer.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
